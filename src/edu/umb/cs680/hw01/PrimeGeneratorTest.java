@@ -25,7 +25,7 @@ public class PrimeGeneratorTest {
             pgTest = new PrimeGenerator(from,to);
         }
         catch(RuntimeException ex){
-            assertEquals(ex.getMessage(),"Wrong input values: from=" + from + " to=" + to);
+            assertEquals("Wrong input values: from=" + from + " to=" + to,ex.getMessage());
         }
 
     }
@@ -39,7 +39,7 @@ public class PrimeGeneratorTest {
             pgTest = new PrimeGenerator(from,to);
         }
         catch(RuntimeException ex){
-            assertEquals(ex.getMessage(),"Wrong input values: from=" + from + " to=" + to);
+            assertEquals("Wrong input values: from=" + from + " to=" + to, ex.getMessage());
         }
 
     }
@@ -48,12 +48,25 @@ public class PrimeGeneratorTest {
     //Testing for prime number between 1 and 20
     public void checkForGeneratePrimeBetween1And20(){
         //Prime numbers between 1 and 20 are stored in the actual list.
-        LinkedList<Long> actual = new LinkedList<>(Arrays.asList(2L, 3L, 5L, 7L, 11L, 13L, 17L, 19L));
+        LinkedList<Long> expected = new LinkedList<>(Arrays.asList(2L, 3L, 5L, 7L, 11L, 13L, 17L, 19L));
         pgTest = new PrimeGenerator(1,20);
         pgTest.generatePrimes();
-        LinkedList<Long> expected = pgTest.getPrimes();
+        LinkedList<Long> actual = pgTest.getPrimes();
         // Comparing the actual and expected long list
         assertEquals(expected,actual);
     }
 
+    @Test
+    //Testing the constructor with same upper and lower values like 2 for Prime generator
+    public void checkInputForImproperRange_SameUpperAndLowerLimit(){
+        int from = 2; //the input ranges starts from 2 and ends at 2
+        int to = 2; //Therefore will throw an error
+        try {
+            pgTest = new PrimeGenerator(from,to);
+        }
+        catch(RuntimeException ex){
+            assertEquals("Wrong input values: from=" + from + " to=" + to,ex.getMessage());
+        }
+
+    }
 }
