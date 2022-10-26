@@ -31,27 +31,3 @@ public class SingletonTest {
 
 
 }
-
-
-/*
-public class SingletonNullCheckingJava7{
-private SingletonNullCheckingJava7(){};
-private static SingletonNullCheckingJava7 instance = null;
-public static SingletonNullCheckingJava7 getInstance(){
-try{
-return Objects.requireNonNull(instance);
-}
-catch(NullPointerException ex){
-instance = new SingletonNullCheckingJava7();
-return instance;
-} }
- */
-
-/*
- Verify getInstance() returns a non-null value
-• Use Assertions.assertNonNull()
-– Verify getInstance() returns the identical instance
-when it is called multiple times.
-• Use hashCode() and assertEquals()
-– Use assertSame() alternatively
- */
