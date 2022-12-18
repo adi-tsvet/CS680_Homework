@@ -1,0 +1,104 @@
+package edu.umb.cs680.hw13.fs;
+
+
+import edu.umb.cs680.hw13.comparator.AlphabeticalComparator;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+
+public class Directory extends FSElement {
+
+    private LinkedList<FSElement> children;
+    private LinkedList<Directory> subDirectory;
+    private LinkedList<File> files;
+    private LinkedList<Link> links;
+
+    public Directory(Directory parent, String name, int size, LocalDateTime creationTime) {
+        super(parent, name, 0, creationTime);
+        this.children = new LinkedList<>();
+        this.subDirectory = new LinkedList<>();
+        this.files = new LinkedList<>();
+        this.links = new LinkedList<>();
+        if (parent != null)
+            parent.appendChild(this);
+    }
+
+    public LinkedList<FSElement> getChildren(Comparator<FSElement> comparator){
+        Collections.sort(children, comparator);
+        return this.children;
+    }
+
+    public void appendChild (FSElement child){
+        this.children.add(child);
+        child.setParent(this);
+    }
+
+    public int countChildren(){
+        return this.children.size();
+    }
+
+    public LinkedList<Directory> getSubDirectories(Comparator<FSElement> comparator) {
+        for (FSElement element : children) {
+            if (element.isDirectory()) {
+                subDirectory.add((Directory) element);
+            }
+        }
+        Collections.sort(subDirectory, comparator);
+        return subDirectory;
+    }
+
+    public LinkedList<File> getFiles(Comparator<FSElement> comparator) {
+        for (FSElement element : children) {
+            if (element.isFile()) {
+                files.add((File) element);
+            }
+        }
+        Collections.sort(files, comparator);
+        return files;
+    }
+
+    public int getTotalSize() {
+        int totalSize = 0;
+        for (FSElement element : children) {
+            if (element.isDirectory()) {
+                totalSize += ((Directory) element).getTotalSize();
+            } else {
+                totalSize += element.getSize();
+            }
+        }
+        return totalSize;
+    }
+
+    public boolean isDirectory() {
+        return true;
+    }
+
+    public boolean isFile() {
+        return false;
+    }
+
+    public boolean isLink() {
+        return false;
+    }
+
+    @Override
+    public void accept(FSVisitor v) {
+        v.visit(this);
+        for (FSElement e : children) {
+            e.accept(v);
+        }
+    }
+
+    public LinkedList<Link> getLinks(){
+
+        for (FSElement fsElement : children) {
+            if (fsElement.isLink()) {
+                Link link = (Link)fsElement;
+                links.add(link);
+            }
+        }
+        return links;
+    }
+}
